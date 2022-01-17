@@ -53,7 +53,8 @@ namespace EcommerceApi.Controllers
                        return (StatusCode(400, new Response { ResponseCode = "99", ResponseMessage = "Id Not Found", Data = null }));
                    
                 }
-                _cartService.AddItems(request);
+                var res =await _cartService.AddItems(request);
+                if(res!= "") return StatusCode(400, new Response { ResponseCode = "99", ResponseMessage = res, Data = null });
 
                 return Ok(new Response { ResponseCode = "00", ResponseMessage = "Sucessfull", Data = null });
 
@@ -66,9 +67,9 @@ namespace EcommerceApi.Controllers
             }
         }
 
-        [Route("GetCartById")]
+        [Route("GetCartByUserId")]
         [HttpGet]
-        public async Task<IActionResult> GetCartById(string userid)
+        public async Task<IActionResult> GetCartByUserId(string userid)
         {
             try
             {
@@ -135,6 +136,30 @@ namespace EcommerceApi.Controllers
                 return StatusCode(500, e);
             }
 
+        }
+
+        [Route("GetCartById")]
+        [HttpGet]
+        public async Task<IActionResult> GetCartById(int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return (StatusCode(400, new Response { ResponseCode = "99", ResponseMessage = "Id Not Found", Data = null }));
+
+                }
+                var val = await _cartService.GetItemByID(id);
+                if (val.Count == 0)
+                {
+                    return (StatusCode(400, new Response { ResponseCode = "99", ResponseMessage = "Id Not Found", Data = null }));
+                }
+                return Ok(new Response { ResponseCode = "00", ResponseMessage = "Sucessfull", Data = val });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e);
+            }
         }
     }
 }

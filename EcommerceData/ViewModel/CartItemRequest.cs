@@ -11,11 +11,9 @@ namespace EcommerceData.ViewModel
       
         [Required(ErrorMessage = "Number of item not picked")]
         [Display(Name = "Product Name")]
-        [StringLength(maximumLength:  300, ErrorMessage ="Name too Long , give a shorter name")]
+        [StringLength(maximumLength:  300, ErrorMessage ="Name too Long , give a shorter name")]  
         public string ItemName { get; set; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "Please enter a value bigger than {1}")]
-        [Display(Name = "Unit")]
+        public int ItemId { get; set; }
         public int NumOfItem { get; set; }
     }
 }

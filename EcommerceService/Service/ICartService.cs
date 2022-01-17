@@ -10,9 +10,11 @@ namespace EcommerceService
     public interface ICartService
     {
         Task<IEnumerable<CartItem>> GetItems();
-         void AddItems(CartItemRequest request);
+         Task<string> AddItems(CartItemRequest request);
         Task<List<CartItem>> GetItem(string id);
         Task<bool> UpdateCart(int id, int newItemNum);
         Task<bool> DeleteCart(int id);
+
+        Task<List<CartItem>> GetItemByID(int id);
     }
 }

@@ -33,7 +33,7 @@ namespace EcommerceService.Service
             {
                 var userExists = await _userManager.FindByNameAsync(userRequest.EmailAddress);
                 if (userExists != null) return"User Already Exist" ;
-                    User user = new User()
+                User user = new User()
                 {
                     FirstName = userRequest.FirstName,
                     LastName = userRequest.LastName,
@@ -43,7 +43,14 @@ namespace EcommerceService.Service
                     UserName = userRequest.EmailAddress
                 };
                 var res = await _userManager.CreateAsync(user, userRequest.Password);
-                return res;
+                if(res.Succeeded!=true)return res;
+                LoginRequest login = new LoginRequest()
+                {
+                    EmailAddress = userRequest.EmailAddress,
+                    Password = userRequest.Password
+                };
+                var token = await LogIn(login);
+                return token;
             }
             catch (Exception ex)
             {
@@ -58,7 +65,7 @@ namespace EcommerceService.Service
         {
             try
             {
-               
+                //var username = Microsoft.AspNetCore.Http.HttpContext.Current.User.Identity.Name;
                 var user1 = _userManager.Users.SingleOrDefault(u => u.UserName == loginRequest.EmailAddress);
                 if (user1 is null) return "User Does Not Exist";
                 var userSigninResult = await _userManager.CheckPasswordAsync(user1, loginRequest.Password);

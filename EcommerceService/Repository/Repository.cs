@@ -43,6 +43,11 @@ namespace EcommerceService.Repository
             return  _dbContext.Set<T>().Where(expression).ToList();
 
         }
+        public async Task<T> GetBySingleCondition(Expression<Func<T, bool>> expression)
+        {
+            return _dbContext.Set<T>().FirstOrDefault(expression);
+
+        }
 
         public void Delete(T entity)
         {
